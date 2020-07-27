@@ -2,15 +2,17 @@ import { setPiece, clearBoard, redStartingPositions, blackStartingPositions } fr
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 let boardState = [
-    { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, { id: 4, color: 'red', isKing: false }, 
-    { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false }, { id: 8, color: 'red', isKing: false },
-    { id: 9, color: 'red', isKing: false }, { id: 10, color: 'red', isKing: false }, { id: 11, color: 'red', isKing: false }, { id: 12, color: 'red', isKing: false }, 
+    { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
+    { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
+    { id: 8, color: 'red', isKing: false }, { id: 9, color: 'red', isKing: false }, { id: 10, color: 'red', isKing: false }, { id: 11, color: 'red', isKing: false }, 
     null, null, null, null,
     null, null, null, null, 
-    { id: 13, color: 'black', isKing: false }, { id: 14, color: 'black', isKing: false }, { id: 15, color: 'black', isKing: false }, { id: 16, color: 'black', isKing: false },
-    { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, { id: 20, color: 'black', isKing: false }, 
-    { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }, { id: 24, color: 'black', isKing: false }
+    { id: 12, color: 'black', isKing: false }, { id: 13, color: 'black', isKing: false }, { id: 14, color: 'black', isKing: false }, { id: 15, color: 'black', isKing: false },
+    { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
+    { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
+
+let squareSelected = [];
 
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
@@ -42,6 +44,16 @@ function removePiece(square) {
     boardState[square] = null;
 }
 
-
+function setEventListeners() {
+    for (let i = 0; i < allClickableSquares.length; i++) {
+        const currentClickableSquare = allClickableSquares[i];
+        currentClickableSquare.addEventListener('click', () => {
+            console.log(currentClickableSquare.id);
+            squareSelected.push(currentClickableSquare.id);
+            console.log(squareSelected);
+        });
+    }
+}
 
 renderBoard();
+setEventListeners();
