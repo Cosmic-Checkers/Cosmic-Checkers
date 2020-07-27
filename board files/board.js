@@ -1,4 +1,4 @@
-import { setPiece, clearBoard, redStartingPositions, blackStartingPositions } from './board-utils.js';
+import {  } from './board-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 let boardState = [
@@ -33,14 +33,12 @@ function renderBoard() {
             }
         } 
     }
-    console.log('board rendered')
 }
 
 function movePiece(squareFrom, squareTo) {
     boardState[squareTo] = boardState[squareFrom];
 
     removePiece(squareFrom);
-    console.log('piece moved')
 }
 
 function removePiece(square) {
@@ -57,40 +55,39 @@ function setEventListeners() {
 }
 
 function checkMove(lastClick) {
-    console.log(lastClick.id)
-    
-
-
-    if (squareSelected.length === 1) {
-        //check if in range
-
+    if (secondMoveOk(lastClick)) {
         squareSelected.push(lastClick.id);
-
-        
         movePiece(squareSelected[0], squareSelected[1]);
-
-
         renderBoard();
+        squareSelected = [];
+
+        //check for attack
+
+
     }
 
-    
 
-    if (boardState[lastClick.id]) {
-        const colorOfClicked = boardState[lastClick.id].color;
         
-        if (turn === colorOfClicked) {
-            
-            console.log(boardState[lastClick.id].id)
-            squareSelected.push(lastClick.id)
-    
-    
-        }
+    if (firstMoveOk(lastClick)) {
+        console.log(boardState[lastClick.id].id)
+        squareSelected.push(lastClick.id)
     }
+    console.log(boardState)
+}
 
+function firstMoveOk(lastClick) {
+    if (boardState[lastClick.id] && boardState[lastClick.id].color === turn) {
+        return true;
+    }
+    return false;
+}
 
-    
-
-    console.log(squareSelected)
+function secondMoveOk(lastClick) {
+    //check if in range, check if attack ok, check for other illegal moves
+    if (squareSelected.length === 1) {
+        return true;
+    }
+    return false;
 }
 
 renderBoard();
