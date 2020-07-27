@@ -1,47 +1,43 @@
-export function setPiece(color, coordinate) {
-    //stuff
-}
-
-export function clearBoard() {
-    //stuff
-}
-
-export function findById(array, squareId) {
-    for (let i = 0; i < array.length; i++) {
-        const currentArrayItem = array[i];
-        if (currentArrayItem === squareId) {
-            //stuff
-        }
-    }
-}
-
-
-export const blackStartingPositions = [
-    'sq20',
-    'sq22',
-    'sq24',
-    'sq26',
-    'sq11',
-    'sq13',
-    'sq15',
-    'sq17',
-    'sq00',
-    'sq02',
-    'sq04',
-    'sq06'
+const redMovesFrom = [
+    0,1,2,3,
+    4,5,6,7,
+    8,9,10,11,
+    12,13,14,15,
+    16,17,18,19,
+    20,21,22,23,
+    24,25,26,27,
+    [], [], [], [],
 ];
 
-export const redStartingPositions = [
-    'sq71',
-    'sq73',
-    'sq75',
-    'sq77',
-    'sq60',
-    'sq62',
-    'sq64',
-    'sq66',
-    'sq51',
-    'sq53',
-    'sq55',
-    'sq57'
+const redAttacksFrom = [
+    0,1,2,3,
+    4,5,6,7,
+    8,9,10,11,
+    12,13,14,15,
+    16,17,18,19,
+    20,21,22,23,
+    [], [], [], [],
+    [], [], [], [],
+];
+
+const blackMovesFrom = [
+    [], [], [], [],
+    4,5,6,7,
+    8,9,10,11,
+    12,13,14,15,
+    16,17,18,19,
+    20,21,22,23,
+    24,25,26,27,
+    28,29,30,31
+];
+
+const blackAttacksFrom = [
+    [], [], [], [],
+    [], [], [], [],
+    8,9,10,11,
+    12,13,14,15,
+    16,17,18,19,
+    20,21,22,23,
+    24,25,26,27,
+    28,29,30,31
 ];

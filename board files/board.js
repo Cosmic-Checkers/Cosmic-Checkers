@@ -1,4 +1,4 @@
-import { setPiece, clearBoard, redStartingPositions, blackStartingPositions } from './board-utils.js';
+import {  } from './board-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 let boardState = [
@@ -13,6 +13,7 @@ let boardState = [
 ];
 
 let squareSelected = [];
+let turn = 'black';
 
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
@@ -48,11 +49,45 @@ function setEventListeners() {
     for (let i = 0; i < allClickableSquares.length; i++) {
         const currentClickableSquare = allClickableSquares[i];
         currentClickableSquare.addEventListener('click', () => {
-            console.log(currentClickableSquare.id);
-            squareSelected.push(currentClickableSquare.id);
-            console.log(squareSelected);
+            checkMove(currentClickableSquare);
         });
     }
+}
+
+function checkMove(lastClick) {
+    if (secondMoveOk(lastClick)) {
+        squareSelected.push(lastClick.id);
+        movePiece(squareSelected[0], squareSelected[1]);
+        renderBoard();
+        squareSelected = [];
+
+        //check for attack
+
+
+    }
+
+
+        
+    if (firstMoveOk(lastClick)) {
+        console.log(boardState[lastClick.id].id)
+        squareSelected.push(lastClick.id)
+    }
+    console.log(boardState)
+}
+
+function firstMoveOk(lastClick) {
+    if (boardState[lastClick.id] && boardState[lastClick.id].color === turn) {
+        return true;
+    }
+    return false;
+}
+
+function secondMoveOk(lastClick) {
+    //check if in range, check if attack ok, check for other illegal moves
+    if (squareSelected.length === 1) {
+        return true;
+    }
+    return false;
 }
 
 renderBoard();
