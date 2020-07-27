@@ -13,6 +13,7 @@ let boardState = [
 ];
 
 let squareSelected = [];
+let turn = 'black';
 
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
@@ -32,12 +33,14 @@ function renderBoard() {
             }
         } 
     }
+    console.log('board rendered')
 }
 
 function movePiece(squareFrom, squareTo) {
     boardState[squareTo] = boardState[squareFrom];
 
     removePiece(squareFrom);
+    console.log('piece moved')
 }
 
 function removePiece(square) {
@@ -48,11 +51,46 @@ function setEventListeners() {
     for (let i = 0; i < allClickableSquares.length; i++) {
         const currentClickableSquare = allClickableSquares[i];
         currentClickableSquare.addEventListener('click', () => {
-            console.log(currentClickableSquare.id);
-            squareSelected.push(currentClickableSquare.id);
-            console.log(squareSelected);
+            checkMove(currentClickableSquare);
         });
     }
+}
+
+function checkMove(lastClick) {
+    console.log(lastClick.id)
+    
+
+
+    if (squareSelected.length === 1) {
+        //check if in range
+
+        squareSelected.push(lastClick.id);
+
+        
+        movePiece(squareSelected[0], squareSelected[1]);
+
+
+        renderBoard();
+    }
+
+    
+
+    if (boardState[lastClick.id]) {
+        const colorOfClicked = boardState[lastClick.id].color;
+        
+        if (turn === colorOfClicked) {
+            
+            console.log(boardState[lastClick.id].id)
+            squareSelected.push(lastClick.id)
+    
+    
+        }
+    }
+
+
+    
+
+    console.log(squareSelected)
 }
 
 renderBoard();
