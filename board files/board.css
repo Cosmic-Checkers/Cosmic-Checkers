@@ -1,0 +1,48 @@
+section {background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .clickable {
+    
+
+} */
+
+.dark-square {
+    background-color: gray;
+    
+}
+
+
+table {
+    border: solid black;
+   
+}
+.king {
+    background-image: url(../assets/crown.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    
+}
+.red-piece {
+    background-color: red;
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+
+}
+
+.black-piece {
+    background-color: black;
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+
+}
+
+td {
+    height: 50px;
+    width: 50px;
+}
