@@ -12,6 +12,8 @@ let boardState = [
     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
 
+let squareSelected = [];
+
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
         const currentPiece = boardState[i];
@@ -47,6 +49,8 @@ function setEventListeners() {
         const currentClickableSquare = allClickableSquares[i];
         currentClickableSquare.addEventListener('click', () => {
             console.log(currentClickableSquare.id);
+            squareSelected.push(currentClickableSquare.id);
+            console.log(squareSelected);
         });
     }
 }
