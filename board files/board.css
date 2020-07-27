@@ -1,0 +1,26 @@
+section {background-color: white;
+}
+
+.clickable {
+    background-color:gray;
+}
+
+td {
+    height: 25px;
+    width: 25px;
+    border: 1px black;
+}
+table {
+    border: solid black;
+    border-collapse: collapse;
+}
+
+.red-piece {
+    border: red 5px;
+    border-radius: 25px;
+
+}
+
+.black-piece {
+
+}
