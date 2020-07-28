@@ -1,4 +1,4 @@
-import {  } from './board-utils.js';
+import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom } from './board-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 let boardState = [
@@ -60,19 +60,41 @@ function checkMove(lastClick) {
         movePiece(squareSelected[0], squareSelected[1]);
         renderBoard();
         squareSelected = [];
-
-        //check for attack
-
-
+        turn = switchTurn(turn);
     }
 
-
+    
         
     if (firstMoveOk(lastClick)) {
-        console.log(boardState[lastClick.id].id)
-        squareSelected.push(lastClick.id)
+        console.log(boardState[lastClick.id].id);
+        squareSelected.push(lastClick.id);
     }
-    console.log(boardState)
+    
+}
+
+function secondAttackOk(lastClick) {
+    
+    const isKing = boardState[lastClick.id].isKing;
+    // const possibleAttack = 
+
+    console.log(isKing);
+    // if lastClick is empty, if move in same direction is opposite color
+}
+
+function getAttack(color, squareNumber) {
+    if (color === 'red') {
+        return redAttacksFrom[squareNumber];
+    }
+    return blackAttacksFrom[squareNumber];
+
+}
+
+function getMoves(color, squareNumber) {
+    if (color === 'red') {
+        return redMovesFrom[squareNumber];
+    }
+    return blackMovesFrom[squareNumber];
+
 }
 
 function firstMoveOk(lastClick) {
@@ -82,12 +104,48 @@ function firstMoveOk(lastClick) {
     return false;
 }
 
+function isItemInArray(item, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (Number(item) === array[i]) {
+            return true;
+        }
+        
+    }
+    
+    return false;
+}
+
 function secondMoveOk(lastClick) {
-    //check if in range, check if attack ok, check for other illegal moves
     if (squareSelected.length === 1) {
+        const possibleMoves = getMoves(turn, squareSelected[0]);
+        const isEmpty = isSquareEmpty(lastClick);
+        
+        const isAPossibleMove = isItemInArray(lastClick.id, possibleMoves);
+      
+        if (isEmpty && isAPossibleMove) {
+            return true;
+        }
+        squareSelected.pop();
+        return false;
+
+    }
+}
+
+function isSquareEmpty(lastClick){
+    if (boardState[lastClick.id] === null) {
         return true;
     }
     return false;
+}
+
+function switchTurn(currentTurn) {
+    if (turn === 'red') {
+        return 'black';
+        
+    }
+    return 'red';
+
+
 }
 
 renderBoard();
