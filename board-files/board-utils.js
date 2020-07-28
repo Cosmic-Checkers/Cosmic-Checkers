@@ -10,12 +10,12 @@ export const redMovesFrom = [
 ];
 
 export const redAttacksFrom = [
-    [9], [8, 10], [9, 11], [10],
-    [13], [12, 14], [13, 15], [14],
-    [17], [16, 18], [17, 19], [18],
-    [21], [20, 22], [21, 23], [22],
-    [25], [24, 26], [25, 27], [26],
-    [29], [28, 30], [29, 31], [30],
+    [{ dest: 9, jump: 5 }], [{ dest: 8, jump: 5 }, { dest: 10, jump: 6 }], [{ dest: 9, jump: 6 }, { dest: 11, jump: 7 }], [{ dest: 10, jump: 7 }],
+    [{ dest: 13, jump: 8 }], [{ dest: 12, jump: 8 }, { dest: 14, jump: 9 }], [{ dest: 13, jump: 9 }, { dest: 15, jump: 10 }], [{ dest: 14, jump: 10 }],
+    [{ dest: 17, jump: 13 }], [{ dest: 16, jump: 13 }, { dest: 18, jump: 14 }], [{ dest: 17, jump: 14 }, { dest: 19, jump: 15 }], [{ dest: 18, jump: 15 }],
+    [{ dest: 21, jump: 16 }], [{ dest: 20, jump: 16 }, { dest: 22, jump: 17 }], [{ dest: 21, jump: 17 }, { dest: 23, jump: 18 }], [{ dest: 22, jump: 18 }],
+    [{ dest: 25, jump: 21 }], [{ dest: 24, jump: 21 }, { dest: 26, jump: 22 }], [{ dest: 25, jump: 22 }, { dest: 27, jump: 23 }], [{ dest: 26, jump: 23 }],
+    [{ dest: 29, jump: 24 }], [{ dest: 28, jump: 24 }, { dest: 30, jump: 25 }], [{ dest: 29, jump: 25 }, { dest: 31, jump: 26 }], [{ dest: 30, jump: 26 }],
     [], [], [], [],
     [], [], [], [],
 ];
