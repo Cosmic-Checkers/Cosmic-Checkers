@@ -1,6 +1,7 @@
-import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom } from './board-utils.js';
+import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece } from './board-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
+
 let boardState = [
     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
     { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
@@ -35,15 +36,6 @@ function renderBoard() {
     }
 }
 
-function movePiece(squareFrom, squareTo) {
-    boardState[squareTo] = boardState[squareFrom];
-
-    removePiece(squareFrom);
-}
-
-function removePiece(square) {
-    boardState[square] = null;
-}
 
 function setEventListeners() {
     for (let i = 0; i < allClickableSquares.length; i++) {
@@ -57,19 +49,20 @@ function setEventListeners() {
 function checkMove(lastClick) {
     if (secondMoveOk(lastClick)) {
         squareSelected.push(lastClick.id);
-        movePiece(squareSelected[0], squareSelected[1]);
+        boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
         renderBoard();
         squareSelected = [];
         turn = switchTurn(turn);
     }
-
-    
-        
     if (firstMoveOk(lastClick)) {
         console.log(boardState[lastClick.id].id);
         squareSelected.push(lastClick.id);
     }
-    
+    refreshSelected();
+}
+
+function refreshSelected() {
+    console.log('refresh selected');
 }
 
 function secondAttackOk(lastClick) {
@@ -101,17 +94,6 @@ function firstMoveOk(lastClick) {
     if (boardState[lastClick.id] && boardState[lastClick.id].color === turn) {
         return true;
     }
-    return false;
-}
-
-function isItemInArray(item, array) {
-    for (let i = 0; i < array.length; i++) {
-        if (Number(item) === array[i]) {
-            return true;
-        }
-        
-    }
-    
     return false;
 }
 
