@@ -52,3 +52,16 @@ export function isItemInArray(item, array) {
     
     return false;
 }
+
+export function movePiece(squareFrom, squareTo, boardState) {
+    const modifiedBoardState = boardState.slice();
+    modifiedBoardState[squareTo] = modifiedBoardState[squareFrom];
+
+    removePiece(squareFrom, modifiedBoardState);
+
+    return modifiedBoardState;
+}
+
+export function removePiece(square, oldBoardState) {
+    oldBoardState[square] = null;
+}
