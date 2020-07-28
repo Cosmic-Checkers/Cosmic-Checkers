@@ -34,12 +34,12 @@ export const blackMovesFrom = [
 export const blackAttacksFrom = [
     [], [], [], [],
     [], [], [], [],
-    [1], [0, 2], [1, 3], [2],
-    [5], [4, 6], [5, 7], [6],
-    [9], [8, 10], [9, 11], [10],
-    [13], [12, 14], [13, 15], [14],
-    [17], [16, 18], [17, 19], [18],
-    [21], [20, 22], [21, 23], [22]
+    [{ dest: 1, jump: 5 }], [{ dest: 0, jump: 5 }, { dest: 2, jump: 6 }], [{ dest: 1, jump: 6 }, { dest: 3, jump: 7 }], [{ dest: 2, jump: 7 }],
+    [{ dest: 5, jump: 8 }], [{ dest: 4, jump: 8 }, { dest: 6, jump: 9 }], [{ dest: 5, jump: 9 }, { dest: 7, jump: 10 }], [{ dest: 6, jump: 10 }],
+    [{ dest: 9, jump: 13 }], [{ dest: 8, jump: 13 }, { dest: 10, jump: 14 }], [{ dest: 9, jump: 14 }, { dest: 11, jump: 15 }], [{ dest: 10, jump: 15 }],
+    [{ dest: 13, jump: 16 }], [{ dest: 12, jump: 16 }, { dest: 14, jump: 17 }], [{ dest: 13, jump: 17 }, { dest: 15, jump: 18 }], [{ dest: 14, jump: 18 }],
+    [{ dest: 17, jump: 21 }], [{ dest: 16, jump: 21 }, { dest: 18, jump: 22 }], [{ dest: 17, jump: 22 }, { dest: 19, jump: 23 }], [{ dest: 18, jump: 23 }],
+    [{ dest: 21, jump: 24 }], [{ dest: 20, jump: 24 }, { dest: 22, jump: 25 }], [{ dest: 21, jump: 25 }, { dest: 23, jump: 26 }], [{ dest: 22, jump: 26 }]
 ];
 
 export function isItemInArray(item, array) {
