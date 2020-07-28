@@ -1,6 +1,7 @@
 import { setPiece, clearBoard, redStartingPositions, blackStartingPositions } from './board-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
+
 let boardState = [
     { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, { id: 4, color: 'red', isKing: false }, 
     { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false }, { id: 8, color: 'red', isKing: false },
