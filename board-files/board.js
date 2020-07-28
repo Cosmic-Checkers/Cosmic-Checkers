@@ -46,6 +46,24 @@ function setEventListeners() {
     }
 }
 
+function attackOk(lastClick) {
+    const currentAttacks = getAttack(squareSelected[0]);
+    if (squareSelected.length === 1) {
+        for (let i = 0; i < currentAttacks.length; i++) {
+            const clickedId = Number(lastClick.id);
+            const currentAttackOption = currentAttacks[i];
+            const currentDestination = Number(currentAttackOption.dest);
+            const currentJump = Number(currentAttackOption.jump);
+
+            if (currentDestination === clickedId && isSquareEmpty(lastClick) && !isSquareEmpty(currentJump) && boardState[currentJump].color !== turn) {
+                removePiece(currentJump, boardState);
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
 function checkMove(lastClick) {
     if (secondMoveOk(lastClick)) {
         squareSelected.push(lastClick.id);
@@ -53,16 +71,28 @@ function checkMove(lastClick) {
         renderBoard();
         squareSelected = [];
         turn = switchTurn(turn);
+    } else if (attackOk(lastClick)) {
+        //EVERYTHING that happens when you jump
+        squareSelected.push(lastClick.id);
+        boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
+        renderBoard();
+        //CHECK IF THERE ARE MORE JUMPS
+        squareSelected = [];
+        turn = switchTurn(turn);
+    } else {
+        squareSelected.pop();
     }
+
     if (firstMoveOk(lastClick)) {
-        console.log(boardState[lastClick.id].id);
+        //console.log(boardState[lastClick.id].id);
         squareSelected.push(lastClick.id);
     }
     refreshSelected();
+    console.log(squareSelected);
 }
 
 function refreshSelected() {
-    console.log('refresh selected');
+    //console.log('refresh selected');
 }
 
 function secondAttackOk(lastClick) {
@@ -70,16 +100,16 @@ function secondAttackOk(lastClick) {
     const isKing = boardState[lastClick.id].isKing;
     // const possibleAttack = 
 
-    console.log(isKing);
+    //console.log(isKing);
     // if lastClick is empty, if move in same direction is opposite color
 }
 
-function getAttack(color, squareNumber) {
-    if (color === 'red') {
-        return redAttacksFrom[squareNumber];
+function getAttack(lastClick) {
+    if (turn === 'red') {
+        return redAttacksFrom[lastClick];
+    } else {
+        return blackAttacksFrom[lastClick];
     }
-    return blackAttacksFrom[squareNumber];
-
 }
 
 function getMoves(color, squareNumber) {
@@ -103,11 +133,11 @@ function secondMoveOk(lastClick) {
         const isEmpty = isSquareEmpty(lastClick);
         
         const isAPossibleMove = isItemInArray(lastClick.id, possibleMoves);
-      
+    
         if (isEmpty && isAPossibleMove) {
             return true;
         }
-        squareSelected.pop();
+
         return false;
 
     }
