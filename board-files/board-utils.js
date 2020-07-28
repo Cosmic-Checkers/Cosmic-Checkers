@@ -42,3 +42,13 @@ export const blackAttacksFrom = [
     [21], [20, 22], [21, 23], [22]
 ];
 
+export function isItemInArray(item, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (Number(item) === array[i]) {
+            return true;
+        }
+        
+    }
+    
+    return false;
+}
