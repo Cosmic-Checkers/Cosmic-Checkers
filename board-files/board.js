@@ -13,8 +13,23 @@ let boardState = [
     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
 
+
+// let boardState = [ 
+//     null, null, null, null,
+//     null, null, null, null,
+//     null, null, { id: 0, color: 'red', isKing: false }, null,
+//     null, null, null, null,
+//     null, { id: 0, color: 'red', isKing: false }, null, null,
+//     null, null, null, null,
+//     { id: 0, color: 'red', isKing: false }, null, null, null,
+//     { id: 0, color: 'black', isKing: false }, null, null, null,
+// ];
+
 let squareSelected = [];
 let turn = 'black';
+let forceJump = false;
+let validAttackMade = false;
+
 
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
@@ -55,7 +70,11 @@ function attackOk(lastClick) {
             const currentDestination = Number(currentAttackOption.dest);
             const currentJump = Number(currentAttackOption.jump);
 
-            if (currentDestination === clickedId && isSquareEmpty(lastClick) && !isSquareEmpty(currentJump) && boardState[currentJump].color !== turn) {
+            if (currentDestination === clickedId &&
+                 isSquareEmpty(lastClick) &&
+                  !isSquareEmpty(currentJump) &&
+                   boardState[currentJump] &&
+                   boardState[currentJump].color !== turn) {
                 removePiece(currentJump, boardState);
                 return true;
             }
@@ -65,50 +84,110 @@ function attackOk(lastClick) {
 }
 
 function checkMove(lastClick) {
-    if (secondMoveOk(lastClick)) {
-        squareSelected.push(lastClick.id);
-        boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
-        renderBoard();
-        squareSelected = [];
-        turn = switchTurn(turn);
-    } else if (attackOk(lastClick)) {
-        //EVERYTHING that happens when you jump
-        squareSelected.push(lastClick.id);
-        boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
-        renderBoard();
-        //CHECK IF THERE ARE MORE JUMPS
-        squareSelected = [];
-        turn = switchTurn(turn);
-    } else {
-        squareSelected.pop();
-    }
+    
+    if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
+        if (forceJump === false && secondMoveOk(lastClick)) {
+            squareSelected.push(lastClick.id);
+            boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
+            renderBoard();
+            forceJump = false;
+            squareSelected = [];
+            turn = switchTurn(turn);
+        } else if (forceJump === false && attackOk(lastClick)) {
+            //EVERYTHING that happens when you jump
+            squareSelected.push(lastClick.id);
+            boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
+            squareSelected = [lastClick.id];
+            validAttackMade = true;
+            renderBoard();
+            
+            
+           
+        } else if (nextAttackOk(lastClick)) {
+            forceJump = true;
+            squareSelected = [lastClick.id];
+            
+        }
+     
+        if (validAttackMade === true && !nextMultipleAttackOk(lastClick)) {
+        
+            validAttackMade = false;
+            forceJump = false;
+            squareSelected = [];
+            turn = switchTurn(turn);
+        }
 
-    if (firstMoveOk(lastClick)) {
+    }
+    
+
+
+    if (forceJump === false && firstMoveOk(lastClick)) {
         //console.log(boardState[lastClick.id].id);
-        squareSelected.push(lastClick.id);
+        squareSelected = [lastClick.id];
     }
     refreshSelected();
-    console.log(squareSelected);
+   console.log(turn);
+   console.log(squareSelected);
 }
 
 function refreshSelected() {
     //console.log('refresh selected');
 }
 
-function secondAttackOk(lastClick) {
-    
-    const isKing = boardState[lastClick.id].isKing;
-    // const possibleAttack = 
 
-    //console.log(isKing);
-    // if lastClick is empty, if move in same direction is opposite color
+
+function nextMultipleAttackOk(lastClick) {
+    
+    const possibleNextAttacks = getAttack(lastClick.id);
+
+    for (let i = 0; i < possibleNextAttacks.length; i++) {
+        
+        const currentAttackOption = possibleNextAttacks[i];
+        const currentDestination = Number(currentAttackOption.dest);
+        const currentJump = Number(currentAttackOption.jump);
+
+        if (isPossibleJumpEmpty(currentDestination) && !isSquareEmpty(currentJump)) {
+            
+            return true;
+        }
+    }
+    return false;
+
 }
 
-function getAttack(lastClick) {
+
+function nextAttackOk(lastClick) {
+    
+    const possibleNextAttacks = getAttack(lastClick.id);
+
+    for (let i = 0; i < possibleNextAttacks.length; i++) {
+        
+        const currentAttackOption = possibleNextAttacks[i];
+        const currentDestination = Number(currentAttackOption.dest);
+        const currentJump = Number(currentAttackOption.jump);
+
+        if (isPossibleJumpEmpty(currentDestination) && !isSquareEmpty(currentJump) && boardState[currentJump].color !== turn) {
+            removePiece(currentJump, boardState);
+            return true;
+        }
+    }
+    return false;
+
+}
+
+function isPossibleJumpEmpty(id) {
+    if (boardState[id] === null) {
+        return true;
+    }
+    return false;
+} 
+
+
+function getAttack(id) {
     if (turn === 'red') {
-        return redAttacksFrom[lastClick];
+        return redAttacksFrom[id];
     } else {
-        return blackAttacksFrom[lastClick];
+        return blackAttacksFrom[id];
     }
 }
 
@@ -134,7 +213,7 @@ function secondMoveOk(lastClick) {
         
         const isAPossibleMove = isItemInArray(lastClick.id, possibleMoves);
     
-        if (isEmpty && isAPossibleMove) {
+        if (forceJump === false && isEmpty && isAPossibleMove) {
             return true;
         }
 
