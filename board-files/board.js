@@ -1,7 +1,8 @@
 import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow } from './board-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
-
+const drawButton = document.getElementById('draw-button');
+// const turnDisplay = document.getElementById('turn-display');
 let boardState = [
     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
     { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
@@ -31,6 +32,7 @@ let forceJump = false;
 let stopMove = false;
 let wasLegalClick = false;
 let validAttackMade = false;
+
 
 
 function renderBoard() {
@@ -103,17 +105,7 @@ function attackOk(lastClick) {
     }
 }
 
-function doesColorHaveAttack(turn) {
-    for (let i = 0; i < boardState.length; i++) {
-        if (boardState[i].color === turn) {
-            const currentPieceAttackOk = attackOk(allClickableSquares[i]);
-            if (currentPieceAttackOk[0]) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+
 
 function checkMove(lastClick) {
 
@@ -176,9 +168,7 @@ function checkMove(lastClick) {
     }
     wasLegalClick = false;
     checkEndGame();
-    console.log(turn);
-    console.log(squareSelected);
-    console.log(forceJump);
+    
 }
 
 function crownKing(lastClick) {
@@ -354,12 +344,17 @@ function checkEndGame() {
         }
     }
     if (red === 0) {
-        console.log('***GAME OVER, BLACK WINS***');
+        // console.log('***GAME OVER, BLACK WINS***');
     }
     if (black === 0) {
-        console.log('***GAME OVER, RED WINS***');
+        // console.log('***GAME OVER, RED WINS***');
     }
 }
+drawButton.addEventListener('click', () => {
+    document.location = '../results/results.html';
+});
+
+
 
 renderBoard();
 setEventListeners();
