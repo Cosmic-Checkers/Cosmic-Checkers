@@ -43,7 +43,7 @@ export const blackAttacksFrom = [
 ];
 
 export const kingsRow = [
-    0, 1, 3, 4,
+    0, 1, 2, 3,
     28, 29, 30, 31
 ];
 

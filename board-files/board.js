@@ -108,7 +108,6 @@ function checkMove(lastClick) {
         if (forceJump === false && secondMoveOk(lastClick)) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
-            forceJump = false;
             squareSelected = [];
 
             if (isKingMove) {
@@ -143,10 +142,10 @@ function checkMove(lastClick) {
             renderBoard();
         }
     }
-    
-    if (forceJump === false && firstMoveOk(lastClick)) {
+    if (firstMoveOk(lastClick)) {
         squareSelected = [lastClick.id];
     }
+    checkEndGame();
 }
 
 function crownKing(lastClick) {
@@ -162,7 +161,7 @@ function nextMultipleAttackOk(lastClick) {
     
     const possibleNextAttacks = getAttack(lastClick.id);
     const possibleNextKingAttacks = getKingAttack(lastClick.id);
-    debugger;
+
     for (let i = 0; i < possibleNextAttacks.length; i++) {
         
         const currentAttackOption = possibleNextAttacks[i];
@@ -307,6 +306,26 @@ function switchTurn() {
         return 'black';   
     }
     return 'red';
+}
+
+function checkEndGame() {
+    let red = 0;
+    let black = 0;
+
+    for (let i = 0; i < boardState.length; i++) {
+        if (boardState[i] && boardState[i].color === 'red') {
+            red++;
+        }
+        if (boardState[i] && boardState[i].color === 'black') {
+            black++;
+        }
+    }
+    if (red === 0) {
+        console.log('***GAME OVER, BLACK WINS***');
+    }
+    if (black === 0) {
+        console.log('***GAME OVER, RED WINS***');
+    }
 }
 
 renderBoard();
