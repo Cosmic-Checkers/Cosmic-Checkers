@@ -13,9 +13,24 @@ let boardState = [
     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
 
+
+// let boardState = [ 
+//     null, null, null, null,
+//     null, null, null, null,
+//     null, null, { id: 0, color: 'red', isKing: false }, null,
+//     null, null, null, null,
+//     null, { id: 0, color: 'red', isKing: false }, null, null,
+//     null, null, null, null,
+//     { id: 0, color: 'red', isKing: false }, null, null, null,
+//     { id: 0, color: 'black', isKing: false }, null, null, null,
+// ];
+
 let squareSelected = [];
 let turn = 'black';
 let forceJump = false;
+let validAttackMade = false;
+
+
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
         const currentPiece = boardState[i];
@@ -69,11 +84,13 @@ function attackOk(lastClick) {
 }
 
 function checkMove(lastClick) {
+    
     if (squareSelected.length === 1) {
         if (forceJump === false && secondMoveOk(lastClick)) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             renderBoard();
+            forceJump = false;
             squareSelected = [];
             turn = switchTurn(turn);
         } else if (forceJump === false && attackOk(lastClick)) {
@@ -81,6 +98,7 @@ function checkMove(lastClick) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [lastClick.id];
+            validAttackMade = true;
             renderBoard();
             
             
@@ -89,8 +107,11 @@ function checkMove(lastClick) {
             forceJump = true;
             squareSelected = [lastClick.id];
             
-        } else {
-            
+        }
+     
+        if (validAttackMade === true && !nextMultipleAttackOk(lastClick)) {
+        
+            validAttackMade = false;
             forceJump = false;
             squareSelected = [];
             turn = switchTurn(turn);
@@ -113,8 +134,30 @@ function refreshSelected() {
     //console.log('refresh selected');
 }
 
-function nextAttackOk(lastClick) {
+
+
+function nextMultipleAttackOk(lastClick) {
+    
+    const possibleNextAttacks = getAttack(lastClick.id);
+
+    for (let i = 0; i < possibleNextAttacks.length; i++) {
         
+        const currentAttackOption = possibleNextAttacks[i];
+        const currentDestination = Number(currentAttackOption.dest);
+        const currentJump = Number(currentAttackOption.jump);
+
+        if (isPossibleJumpEmpty(currentDestination) && !isSquareEmpty(currentJump)) {
+            
+            return true;
+        }
+    }
+    return false;
+
+}
+
+
+function nextAttackOk(lastClick) {
+    
     const possibleNextAttacks = getAttack(lastClick.id);
 
     for (let i = 0; i < possibleNextAttacks.length; i++) {
