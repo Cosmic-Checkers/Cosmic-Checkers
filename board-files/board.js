@@ -85,7 +85,7 @@ function attackOk(lastClick) {
 
 function checkMove(lastClick) {
     
-    if (squareSelected.length === 1) {
+    if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
         if (forceJump === false && secondMoveOk(lastClick)) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
