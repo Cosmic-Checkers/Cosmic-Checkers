@@ -42,14 +42,17 @@ export const blackAttacksFrom = [
     [{ dest: 21, jump: 24 }], [{ dest: 20, jump: 24 }, { dest: 22, jump: 25 }], [{ dest: 21, jump: 25 }, { dest: 23, jump: 26 }], [{ dest: 22, jump: 26 }]
 ];
 
+export const kingsRow = [
+    0, 1, 3, 4,
+    28, 29, 30, 31
+];
+
 export function isItemInArray(item, array) {
     for (let i = 0; i < array.length; i++) {
         if (Number(item) === array[i]) {
             return true;
         }
-        
     }
-    
     return false;
 }
 
