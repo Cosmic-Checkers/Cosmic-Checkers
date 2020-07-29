@@ -2,32 +2,34 @@ import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemI
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 
-// let boardState = [
-//     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
-//     { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
-//     { id: 8, color: 'red', isKing: false }, { id: 9, color: 'red', isKing: false }, { id: 10, color: 'red', isKing: false }, { id: 11, color: 'red', isKing: false }, 
-//     null, null, null, null,
-//     null, null, null, null, 
-//     { id: 12, color: 'black', isKing: false }, { id: 13, color: 'black', isKing: false }, { id: 14, color: 'black', isKing: false }, { id: 15, color: 'black', isKing: false },
-//     { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
-//     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
-// ];
-
-
-let boardState = [ 
+let boardState = [
+    { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
+    { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
+    { id: 8, color: 'red', isKing: false }, { id: 9, color: 'red', isKing: false }, { id: 10, color: 'red', isKing: false }, { id: 11, color: 'red', isKing: false }, 
     null, null, null, null,
-    null, { id: 32, color: 'red', isKing: false }, null, null,
-    null, { id: 32, color: 'black', isKing: false }, { id: 32, color: 'red', isKing: false }, null,
-    null, null, null, null,
-    null, { id: 32, color: 'red', isKing: false }, null, null,
-    null, null, null, null,
-    { id: 32, color: 'red', isKing: false }, null, null, null,
-    { id: 32, color: 'black', isKing: false }, null, null, null,
+    null, null, null, null, 
+    { id: 12, color: 'black', isKing: false }, { id: 13, color: 'black', isKing: false }, { id: 14, color: 'black', isKing: false }, { id: 15, color: 'black', isKing: false },
+    { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
+    { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
+
+
+// let boardState = [ 
+//     null, null, null, null,
+//     null, { id: 32, color: 'red', isKing: false }, null, null,
+//     null, { id: 32, color: 'black', isKing: false }, { id: 32, color: 'red', isKing: false }, null,
+//     null, null, null, null,
+//     null, { id: 32, color: 'red', isKing: false }, null, null,
+//     null, null, null, null,
+//     { id: 32, color: 'red', isKing: false }, null, null, null,
+//     { id: 32, color: 'black', isKing: false }, null, null, null,
+// ];
 
 let squareSelected = [];
 let turn = 'black';
 let forceJump = false;
+let stopMove = false;
+let wasLegalClick = false;
 let validAttackMade = false;
 
 
@@ -76,8 +78,8 @@ function attackOk(lastClick) {
                   !isSquareIdEmpty(currentJump) &&
                    boardState[currentJump] &&
                    boardState[currentJump].color !== turn) {
-                removePiece(currentJump, boardState);
-                return true;
+
+                return [true, currentJump];
             }
         }
         if (boardState[squareSelected[0]] && boardState[squareSelected[0]].isKing) {
@@ -92,23 +94,39 @@ function attackOk(lastClick) {
                   !isSquareIdEmpty(currentJump) &&
                    boardState[currentJump] &&
                    boardState[currentJump].color !== turn) {
-                    removePiece(currentJump, boardState);
-                    return true;
+                   
+                    return [true, currentJump];
                 }
             }     
         }
-        return false;
+        return [false];
     }
 }
 
+function doesColorHaveAttack(turn) {
+    for (let i = 0; i < boardState.length; i++) {
+        if (boardState[i].color === turn) {
+            const currentPieceAttackOk = attackOk(allClickableSquares[i]);
+            if (currentPieceAttackOk[0]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function checkMove(lastClick) {
+
     const isKingMove = checkKing(lastClick);
-    
+
     if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
-        if (forceJump === false && secondMoveOk(lastClick)) {
+
+        const isAttackOk = attackOk(lastClick);
+        const isNextAttackOk = nextAttackOk(lastClick);
+
+        if (forceJump === false && secondMoveOk(lastClick) && stopMove === false) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
-            forceJump = false;
             squareSelected = [];
 
             if (isKingMove) {
@@ -118,21 +136,31 @@ function checkMove(lastClick) {
             turn = switchTurn(turn);
             renderBoard();
    
-        } else if (forceJump === false && attackOk(lastClick)) {
+        } else if (forceJump === false && isAttackOk[0]) {
             squareSelected.push(lastClick.id);
+
+            removePiece(isAttackOk[1], boardState);
+
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [lastClick.id];
             validAttackMade = true;
+            stopMove = true;
+            wasLegalClick = true;
             renderBoard();
             
-        } else if (nextAttackOk(lastClick)) {
+        } else if (isNextAttackOk[0] && isAttackOk[0]) {
+
+            removePiece(isNextAttackOk[1], boardState);
+
             forceJump = true;
+            wasLegalClick = true;
             squareSelected = [lastClick.id];
         }
 
-        if (validAttackMade === true && !nextMultipleAttackOk(lastClick)) {
+        if (validAttackMade === true && !nextMultipleAttackOk(lastClick) && wasLegalClick) {
             validAttackMade = false;
             forceJump = false;
+            stopMove = false;
             squareSelected = [];
 
             if (isKingMove) {
@@ -143,10 +171,14 @@ function checkMove(lastClick) {
             renderBoard();
         }
     }
-    
-    if (forceJump === false && firstMoveOk(lastClick)) {
+    if (firstMoveOk(lastClick)) {
         squareSelected = [lastClick.id];
     }
+    wasLegalClick = false;
+    checkEndGame();
+    console.log(turn);
+    console.log(squareSelected);
+    console.log(forceJump);
 }
 
 function crownKing(lastClick) {
@@ -162,7 +194,7 @@ function nextMultipleAttackOk(lastClick) {
     
     const possibleNextAttacks = getAttack(lastClick.id);
     const possibleNextKingAttacks = getKingAttack(lastClick.id);
-    debugger;
+
     for (let i = 0; i < possibleNextAttacks.length; i++) {
         
         const currentAttackOption = possibleNextAttacks[i];
@@ -201,8 +233,8 @@ function nextAttackOk(lastClick) {
         const currentJump = Number(currentAttackOption.jump);
 
         if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
-            removePiece(currentJump, boardState);
-            return true;
+
+            return [true, currentJump];
         }
     }
     if (boardState[squareSelected[0]] && boardState[squareSelected[0]].isKing) {
@@ -213,12 +245,12 @@ function nextAttackOk(lastClick) {
             const currentJump = Number(currentAttackOption.jump);
 
             if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
-                removePiece(currentJump, boardState);
-                return true;
+
+                return [true, currentJump];
             }
         }
     }
-    return false;
+    return [false];
 }
 
 function isPossibleJumpEmpty(id) {
@@ -307,6 +339,26 @@ function switchTurn() {
         return 'black';   
     }
     return 'red';
+}
+
+function checkEndGame() {
+    let red = 0;
+    let black = 0;
+
+    for (let i = 0; i < boardState.length; i++) {
+        if (boardState[i] && boardState[i].color === 'red') {
+            red++;
+        }
+        if (boardState[i] && boardState[i].color === 'black') {
+            black++;
+        }
+    }
+    if (red === 0) {
+        console.log('***GAME OVER, BLACK WINS***');
+    }
+    if (black === 0) {
+        console.log('***GAME OVER, RED WINS***');
+    }
 }
 
 renderBoard();
