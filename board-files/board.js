@@ -78,8 +78,8 @@ function attackOk(lastClick) {
                   !isSquareIdEmpty(currentJump) &&
                    boardState[currentJump] &&
                    boardState[currentJump].color !== turn) {
-                removePiece(currentJump, boardState);
-                return true;
+
+                return [true, currentJump];
             }
         }
         if (boardState[squareSelected[0]] && boardState[squareSelected[0]].isKing) {
@@ -94,19 +94,24 @@ function attackOk(lastClick) {
                   !isSquareIdEmpty(currentJump) &&
                    boardState[currentJump] &&
                    boardState[currentJump].color !== turn) {
-                    removePiece(currentJump, boardState);
-                    return true;
+                   
+                    return [true, currentJump];
                 }
             }     
         }
-        return false;
+        return [false];
     }
 }
 
 function checkMove(lastClick) {
-    const isKingMove = checkKing(lastClick);
     
+    const isKingMove = checkKing(lastClick);
+
     if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
+
+        const isAttackOk = attackOk(lastClick);
+        const isNextAttackOk = nextAttackOk(lastClick);
+
         if (forceJump === false && secondMoveOk(lastClick) && stopMove === false) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
@@ -119,8 +124,11 @@ function checkMove(lastClick) {
             turn = switchTurn(turn);
             renderBoard();
    
-        } else if (forceJump === false && attackOk(lastClick)) {
+        } else if (forceJump === false && isAttackOk[0]) {
             squareSelected.push(lastClick.id);
+
+            removePiece(isAttackOk[1], boardState);
+
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [lastClick.id];
             validAttackMade = true;
@@ -128,7 +136,10 @@ function checkMove(lastClick) {
             wasLegalClick = true;
             renderBoard();
             
-        } else if (nextAttackOk(lastClick)) {
+        } else if (isNextAttackOk[0] && isAttackOk[0]) {
+
+            removePiece(isNextAttackOk[1], boardState);
+
             forceJump = true;
             wasLegalClick = true;
             squareSelected = [lastClick.id];
@@ -210,8 +221,8 @@ function nextAttackOk(lastClick) {
         const currentJump = Number(currentAttackOption.jump);
 
         if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
-            removePiece(currentJump, boardState);
-            return true;
+
+            return [true, currentJump];
         }
     }
     if (boardState[squareSelected[0]] && boardState[squareSelected[0]].isKing) {
@@ -222,12 +233,12 @@ function nextAttackOk(lastClick) {
             const currentJump = Number(currentAttackOption.jump);
 
             if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
-                removePiece(currentJump, boardState);
-                return true;
+
+                return [true, currentJump];
             }
         }
     }
-    return false;
+    return [false];
 }
 
 function isPossibleJumpEmpty(id) {
