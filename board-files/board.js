@@ -28,6 +28,8 @@ let boardState = [
 let squareSelected = [];
 let turn = 'black';
 let forceJump = false;
+let stopMove = false;
+let wasLegalClick = false;
 let validAttackMade = false;
 
 
@@ -105,7 +107,7 @@ function checkMove(lastClick) {
     const isKingMove = checkKing(lastClick);
     
     if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
-        if (forceJump === false && secondMoveOk(lastClick)) {
+        if (forceJump === false && secondMoveOk(lastClick) && stopMove === false) {
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [];
@@ -122,16 +124,20 @@ function checkMove(lastClick) {
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [lastClick.id];
             validAttackMade = true;
+            stopMove = true;
+            wasLegalClick = true;
             renderBoard();
             
         } else if (nextAttackOk(lastClick)) {
             forceJump = true;
+            wasLegalClick = true;
             squareSelected = [lastClick.id];
         }
 
-        if (validAttackMade === true && !nextMultipleAttackOk(lastClick)) {
+        if (validAttackMade === true && !nextMultipleAttackOk(lastClick) && wasLegalClick) {
             validAttackMade = false;
             forceJump = false;
+            stopMove = false;
             squareSelected = [];
 
             if (isKingMove) {
@@ -145,7 +151,11 @@ function checkMove(lastClick) {
     if (firstMoveOk(lastClick)) {
         squareSelected = [lastClick.id];
     }
+    wasLegalClick = false;
     checkEndGame();
+    console.log(turn);
+    console.log(squareSelected);
+    console.log(forceJump);
 }
 
 function crownKing(lastClick) {
