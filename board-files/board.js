@@ -2,28 +2,28 @@ import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemI
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 
-// let boardState = [
-//     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
-//     { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
-//     { id: 8, color: 'red', isKing: false }, { id: 9, color: 'red', isKing: false }, { id: 10, color: 'red', isKing: false }, { id: 11, color: 'red', isKing: false }, 
-//     null, null, null, null,
-//     null, null, null, null, 
-//     { id: 12, color: 'black', isKing: false }, { id: 13, color: 'black', isKing: false }, { id: 14, color: 'black', isKing: false }, { id: 15, color: 'black', isKing: false },
-//     { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
-//     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
-// ];
-
-
-let boardState = [ 
+let boardState = [
+    { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
+    { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
+    { id: 8, color: 'red', isKing: false }, { id: 9, color: 'red', isKing: false }, { id: 10, color: 'red', isKing: false }, { id: 11, color: 'red', isKing: false }, 
     null, null, null, null,
-    null, { id: 32, color: 'red', isKing: false }, null, null,
-    null, { id: 32, color: 'black', isKing: false }, { id: 32, color: 'red', isKing: false }, null,
-    null, null, null, null,
-    null, { id: 32, color: 'red', isKing: false }, null, null,
-    null, null, null, null,
-    { id: 32, color: 'red', isKing: false }, null, null, null,
-    { id: 32, color: 'black', isKing: false }, null, null, null,
+    null, null, null, null, 
+    { id: 12, color: 'black', isKing: false }, { id: 13, color: 'black', isKing: false }, { id: 14, color: 'black', isKing: false }, { id: 15, color: 'black', isKing: false },
+    { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
+    { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
+
+
+// let boardState = [ 
+//     null, null, null, null,
+//     null, { id: 32, color: 'red', isKing: false }, null, null,
+//     null, { id: 32, color: 'black', isKing: false }, { id: 32, color: 'red', isKing: false }, null,
+//     null, null, null, null,
+//     null, { id: 32, color: 'red', isKing: false }, null, null,
+//     null, null, null, null,
+//     { id: 32, color: 'red', isKing: false }, null, null, null,
+//     { id: 32, color: 'black', isKing: false }, null, null, null,
+// ];
 
 let squareSelected = [];
 let turn = 'black';
@@ -103,8 +103,20 @@ function attackOk(lastClick) {
     }
 }
 
+function doesColorHaveAttack(turn) {
+    for (let i = 0; i < boardState.length; i++) {
+        if (boardState[i].color === turn) {
+            const currentPieceAttackOk = attackOk(allClickableSquares[i]);
+            if (currentPieceAttackOk[0]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function checkMove(lastClick) {
-    
+
     const isKingMove = checkKing(lastClick);
 
     if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
