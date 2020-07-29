@@ -1,39 +1,69 @@
-body {
-    background-image: url(../assets/jeremy-thomas-4dpAqfTbvKA-unsplash.jpg);
-    display: flex;
-    flex-direction: row;
+main {
+    display: grid;
     justify-content: center;
-    color: white;
+    align-items: center;
+    height: 80%;
+    padding: 10%;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 20px;
+    font-family: 'Ranchers', cursive;
+    background-color: #6761a800;
+    
+    
+}
+header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 70px;
+    background-color: #6761A8;
+    background-image: linear-gradient(black, #6761AB, #70D7FF);
 }
 
-.recent-game-result {
-    border: solid 2px white;
+h1 {
+    font-size: 50px;
+    font-weight: bolder;
+    font-family: 'Ranchers', cursive;
+    
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #6761A8;
+    background-image: linear-gradient( #70D7FF, #6761AB, black);
+
+}
+
+section {
+    display: flex;
+    flex-direction: row;
     width: 80vw;
-    height: 20vh;
+    
+    flex-direction: column;
+    display: block;
+    background-color: #6761a89d;
+    border-radius: 20px;
+    padding: 15px;
+    margin: 15px;
+ 
+    
 }
 
 .player-stats-container {
     display: flex;
-    justify-content: center;
 }
 
 .player-one-stats {
-    flex-direction: row;
-    border: solid 2px white;
+    
     width: 40vw;
-    height: 40vh;
 }
 
 .player-two-stats {
-    flex-direction: row;
-    border: solid 2px white;
+    
     width: 40vw;
-    height: 40vh;
-}
-
-.replay-reset-stats {
-    border: solid 2px white;
-    width: 80vw;
-    height: 20vw;
-    align-items: center;
 }
