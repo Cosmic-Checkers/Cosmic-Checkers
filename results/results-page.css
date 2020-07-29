@@ -1,0 +1,39 @@
+body {
+    background-image: url(../assets/jeremy-thomas-4dpAqfTbvKA-unsplash.jpg);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+}
+
+.recent-game-result {
+    border: solid 2px white;
+    width: 80vw;
+    height: 20vh;
+}
+
+.player-stats-container {
+    display: flex;
+    justify-content: center;
+}
+
+.player-one-stats {
+    flex-direction: row;
+    border: solid 2px white;
+    width: 40vw;
+    height: 40vh;
+}
+
+.player-two-stats {
+    flex-direction: row;
+    border: solid 2px white;
+    width: 40vw;
+    height: 40vh;
+}
+
+.replay-reset-stats {
+    border: solid 2px white;
+    width: 80vw;
+    height: 20vw;
+    align-items: center;
+}
