@@ -37,3 +37,7 @@ time, mark, audio, video {
 ol, ul {
 	list-style: none;
 }
+
+a, .click-link, .dark-square, button {
+	cursor: pointer;
+}
