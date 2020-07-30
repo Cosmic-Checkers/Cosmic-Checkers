@@ -140,6 +140,7 @@ function checkMove(lastClick) {
            
             turn = switchTurn(turn);
             clearSelectedPiece();
+            refreshTurnVariables();
             renderBoard();
    
         } else if (forceJump === false && isAttackOk[0]) {
@@ -176,6 +177,7 @@ function checkMove(lastClick) {
             }
         
             turn = switchTurn(turn);
+            refreshTurnVariables();
             clearSelectedPiece();
             renderBoard();
         }
@@ -188,6 +190,12 @@ function checkMove(lastClick) {
     updateTurnDisplay();
     checkEndGame();
     //displaySelectedPiece();
+}
+
+function refreshTurnVariables() {
+    forceJump = false;
+    stopMove = false;
+    validAttackMade = false;
 }
 
 function crownKing(lastClick) {
@@ -210,7 +218,7 @@ function nextMultipleAttackOk(lastClick) {
         const currentDestination = Number(currentAttackOption.dest);
         const currentJump = Number(currentAttackOption.jump);
 
-        if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump)) {
+        if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
             return true;
         }
     }
@@ -221,7 +229,7 @@ function nextMultipleAttackOk(lastClick) {
             const currentDestination = Number(currentAttackOption.dest);
             const currentJump = Number(currentAttackOption.jump);
 
-            if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump)) {
+            if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
                 return true;
             }
         }
