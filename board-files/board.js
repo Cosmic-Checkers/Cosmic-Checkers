@@ -47,7 +47,6 @@ function updateTurnDisplay() {
 
 }
 
-
 function renderBoard() {
     for (let i = 0; i < boardState.length; i++) {
         const currentPiece = boardState[i];
@@ -374,6 +373,8 @@ function checkEndGame() {
         const losingPlayer = playerColor('red');
         winningPlayer.wins++;
         losingPlayer.losses++;
+        winningPlayer.lastGameResult = 'win';
+        losingPlayer.lastGameResult = 'loss';
         saveToLocalStorage(localStorageData);
         document.location = '../results/results.html';
     }
@@ -382,9 +383,16 @@ function checkEndGame() {
         const losingPlayer = playerColor('black');
         winningPlayer.wins++;
         losingPlayer.losses++;
+        winningPlayer.lastGameResult = 'win';
+        losingPlayer.lastGameResult = 'loss';
         saveToLocalStorage(localStorageData);
         document.location = '../results/results.html';
     }
+}
+
+function resetLastGameResult() {
+    localStorageData[0].lastGameResult = '';
+    localStorageData[1].lastGameResult = '';
 }
 
 drawButton.addEventListener('click', () => {
@@ -398,7 +406,7 @@ drawButton.addEventListener('click', () => {
     }
 });
 
-
+resetLastGameResult();
 updateTurnDisplay();
 renderBoard();
 setEventListeners();
