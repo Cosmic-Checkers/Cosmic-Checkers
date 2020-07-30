@@ -1,4 +1,4 @@
-import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow } from './board-utils.js';
+import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow, getKingAttack, getKingMoves } from './board-utils.js';
 import { loadFromLocalStorage, saveToLocalStorage } from '../game-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
@@ -21,7 +21,7 @@ let boardState = [
 ];
 
 let squareSelected = [];
-let turn = 'black';
+export let turn = 'black';
 let forceJump = false;
 let stopMove = false;
 let wasLegalClick = false;
@@ -123,6 +123,7 @@ function checkMove(lastClick) {
 
     const isKingMove = checkKing(lastClick);
 
+    clearSelectedPiece();
     if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
 
         const isAttackOk = attackOk(lastClick);
@@ -138,6 +139,8 @@ function checkMove(lastClick) {
             }
            
             turn = switchTurn(turn);
+            clearSelectedPiece();
+            refreshTurnVariables();
             renderBoard();
    
         } else if (forceJump === false && isAttackOk[0]) {
@@ -147,6 +150,7 @@ function checkMove(lastClick) {
 
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [lastClick.id];
+            allClickableSquares[squareSelected].classList.add('selected');
             validAttackMade = true;
             stopMove = true;
             wasLegalClick = true;
@@ -159,6 +163,7 @@ function checkMove(lastClick) {
             forceJump = true;
             wasLegalClick = true;
             squareSelected = [lastClick.id];
+            allClickableSquares[squareSelected].classList.add('selected');
         }
 
         if (validAttackMade === true && !nextMultipleAttackOk(lastClick) && wasLegalClick) {
@@ -172,16 +177,25 @@ function checkMove(lastClick) {
             }
         
             turn = switchTurn(turn);
+            refreshTurnVariables();
+            clearSelectedPiece();
             renderBoard();
         }
     }
     if (firstMoveOk(lastClick)) {
         squareSelected = [lastClick.id];
+        allClickableSquares[squareSelected].classList.add('selected');
     }
     wasLegalClick = false;
     updateTurnDisplay();
     checkEndGame();
-    
+    //displaySelectedPiece();
+}
+
+function refreshTurnVariables() {
+    forceJump = false;
+    stopMove = false;
+    validAttackMade = false;
 }
 
 function crownKing(lastClick) {
@@ -204,7 +218,7 @@ function nextMultipleAttackOk(lastClick) {
         const currentDestination = Number(currentAttackOption.dest);
         const currentJump = Number(currentAttackOption.jump);
 
-        if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump)) {
+        if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
             return true;
         }
     }
@@ -215,7 +229,7 @@ function nextMultipleAttackOk(lastClick) {
             const currentDestination = Number(currentAttackOption.dest);
             const currentJump = Number(currentAttackOption.jump);
 
-            if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump)) {
+            if (isPossibleJumpEmpty(currentDestination) && !isSquareIdEmpty(currentJump) && boardState[currentJump].color !== turn) {
                 return true;
             }
         }
@@ -271,13 +285,13 @@ function getAttack(id) {
     }
 }
 
-function getKingAttack(id) {
-    const redAttacks = redAttacksFrom[id];
-    const blackAttacks = blackAttacksFrom[id];
-    const kingAttacks = redAttacks.concat(blackAttacks);
+// function getKingAttack(id) {
+//     const redAttacks = redAttacksFrom[id];
+//     const blackAttacks = blackAttacksFrom[id];
+//     const kingAttacks = redAttacks.concat(blackAttacks);
 
-    return kingAttacks;
-}
+//     return kingAttacks;
+// }
 
 function getMoves(color, squareNumber) {
     if (color === 'red') {
@@ -287,13 +301,13 @@ function getMoves(color, squareNumber) {
 
 }
 
-function getKingMoves(squareNumber) {
-    const redMoves = redMovesFrom[squareNumber];
-    const blackMoves = blackMovesFrom[squareNumber];
-    const kingMoves = redMoves.concat(blackMoves);
+// function getKingMoves(squareNumber) {
+//     const redMoves = redMovesFrom[squareNumber];
+//     const blackMoves = blackMovesFrom[squareNumber];
+//     const kingMoves = redMoves.concat(blackMoves);
 
-    return kingMoves;
-}
+//     return kingMoves;
+// }
 
 function firstMoveOk(lastClick) {
     if (boardState[lastClick.id] && boardState[lastClick.id].color === turn) {
@@ -393,6 +407,14 @@ function checkEndGame() {
 function resetLastGameResult() {
     localStorageData[0].lastGameResult = '';
     localStorageData[1].lastGameResult = '';
+}
+
+function clearSelectedPiece() {
+    for (let i = 0; i < allClickableSquares.length; i++) {
+        const currentClickableSquare = allClickableSquares[i];
+        currentClickableSquare.classList.remove('selected');
+
+    }
 }
 
 drawButton.addEventListener('click', () => {

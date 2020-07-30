@@ -1,3 +1,5 @@
+
+
 export const redMovesFrom = [
     [4, 5], [5, 6], [6, 7], [7],
     [8], [8, 9], [9, 10], [10, 11],
@@ -67,4 +69,20 @@ export function movePiece(squareFrom, squareTo, boardState) {
 
 export function removePiece(square, oldBoardState) {
     oldBoardState[square] = null;
+}
+
+export function getKingAttack(id) {
+    const redAttacks = redAttacksFrom[id];
+    const blackAttacks = blackAttacksFrom[id];
+    const kingAttacks = redAttacks.concat(blackAttacks);
+
+    return kingAttacks;
+}
+
+export function getKingMoves(squareNumber) {
+    const redMoves = redMovesFrom[squareNumber];
+    const blackMoves = blackMovesFrom[squareNumber];
+    const kingMoves = redMoves.concat(blackMoves);
+
+    return kingMoves;
 }
