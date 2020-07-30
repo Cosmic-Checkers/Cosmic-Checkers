@@ -1,6 +1,11 @@
 import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow } from './board-utils.js';
+import { loadFromLocalStorage, saveToLocalStorage } from '../game-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
+const drawButton = document.getElementById('draw-button');
+const turnDisplay = document.getElementById('turn-display');
+const nameDisplay = document.getElementById('name-display-area');
+const gameBoard = document.getElementById('game-board');
 
 let boardState = [
     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
@@ -12,18 +17,7 @@ let boardState = [
     { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
-
-
-// let boardState = [ 
-//     null, null, null, null,
-//     null, { id: 32, color: 'red', isKing: false }, null, null,
-//     null, { id: 32, color: 'black', isKing: false }, { id: 32, color: 'red', isKing: false }, null,
-//     null, null, null, null,
-//     null, { id: 32, color: 'red', isKing: false }, null, null,
-//     null, null, null, null,
-//     { id: 32, color: 'red', isKing: false }, null, null, null,
-//     { id: 32, color: 'black', isKing: false }, null, null, null,
-// ];
+const localStorageData = loadFromLocalStorage();
 
 let squareSelected = [];
 let turn = 'black';
@@ -31,6 +25,26 @@ let forceJump = false;
 let stopMove = false;
 let wasLegalClick = false;
 let validAttackMade = false;
+
+function updateTurnDisplay() {
+    turnDisplay.textContent = turn;
+    let text = '';
+
+    for (let i = 0; i < localStorageData.length; i++) {
+        if (turn === localStorageData[i].color) {
+            text = localStorageData[i].name + ' it is your turn' ;
+        }
+    }
+    nameDisplay.textContent = text;
+    if (turn === 'red') {
+        gameBoard.classList.add('red-turn');
+        gameBoard.classList.remove('black-turn');
+    } else {
+        gameBoard.classList.add('black-turn');
+        gameBoard.classList.remove('red-turn');
+    }
+
+}
 
 
 function renderBoard() {
@@ -103,6 +117,8 @@ function attackOk(lastClick) {
     }
 }
 
+
+
 function checkMove(lastClick) {
 
     const isKingMove = checkKing(lastClick);
@@ -113,7 +129,6 @@ function checkMove(lastClick) {
         const isNextAttackOk = nextAttackOk(lastClick);
 
         if (forceJump === false && secondMoveOk(lastClick) && stopMove === false) {
-            
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [];
@@ -121,7 +136,7 @@ function checkMove(lastClick) {
             if (isKingMove) {
                 crownKing(lastClick);
             }
-
+           
             turn = switchTurn(turn);
             renderBoard();
    
@@ -155,7 +170,7 @@ function checkMove(lastClick) {
             if (isKingMove) {
                 crownKing(lastClick);
             }
-
+        
             turn = switchTurn(turn);
             renderBoard();
         }
@@ -164,10 +179,9 @@ function checkMove(lastClick) {
         squareSelected = [lastClick.id];
     }
     wasLegalClick = false;
+    updateTurnDisplay();
     checkEndGame();
-    console.log(turn);
-    console.log(squareSelected);
-    console.log(doesColorHaveAttack());
+    
 }
 
 function crownKing(lastClick) {
@@ -323,6 +337,7 @@ function isSquareIdEmpty(number) {
     return false;
 }
 
+
 function switchTurn() {
     if (turn === 'red') {
         return 'black';   
@@ -343,12 +358,24 @@ function checkEndGame() {
         }
     }
     if (red === 0) {
-        console.log('***GAME OVER, BLACK WINS***');
+        // console.log('***GAME OVER, BLACK WINS***');
     }
     if (black === 0) {
-        console.log('***GAME OVER, RED WINS***');
+        // console.log('***GAME OVER, RED WINS***');
     }
 }
+drawButton.addEventListener('click', () => {
+    const userConfirm = confirm('Call it a draw?');
+    
+    if (userConfirm) {
+        localStorageData[0].draws++;
+        localStorageData[1].draws++;
+        saveToLocalStorage(localStorageData);
+        document.location = '../results/results.html';
+    }
+});
 
+
+updateTurnDisplay();
 renderBoard();
 setEventListeners();

@@ -1,24 +1,45 @@
-section {background-color: white;
+section {background-color: rgba(0, 0, 0, 0.521);
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 15px;
+    border-radius: 15px;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+}
+#lumpy-draw {
+    width: 50px;
+    height: auto;
+}
 .clickable {
     width: 50px;
     height: 50px;
 }
 
 .dark-square {
-    background-color: gray;
+    background-color: rgba(128, 128, 128, 0.637);
     
 }
 
+.dark-square:hover {
+    transform: scale(1.1);
+}
 
 table {
+    border-radius: 15px;
     border: solid black;
-   
+    
 }
+/* .red-turn {
+    transform: rotate(180deg);
+}
+.black-turn {
+    transform: rotate(360deg);
+} */
+
 .king {
     background-image: url(../assets/crown.png);
     background-repeat: no-repeat;

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/home.css">
@@ -14,12 +15,16 @@
 
 <body>
     <header>
-        
+        <h1>Cosmic Checkers</h1>
     </header>
     <main> 
+        <p id='name-display-area'></p>
+       
+        <p id='turn-display'> </p>
+    
         <section>
 
-            <table>
+            <table id='game-board'>
                
                 <tbody>
                     <tr class='row7'>
@@ -187,6 +192,9 @@
                
             </table>
         </section> 
+        <button id='draw-button'>
+            <img id='lumpy-draw' src='../assets/icons8-lumpy-space-princess-240.png'>
+        </button>
       
     </main>
     <footer>
