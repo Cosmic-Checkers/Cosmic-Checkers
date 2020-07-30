@@ -123,6 +123,7 @@ function checkMove(lastClick) {
 
     const isKingMove = checkKing(lastClick);
 
+    clearSelectedPiece();
     if (squareSelected.length === 1 && boardState[lastClick.id] === null) {
 
         const isAttackOk = attackOk(lastClick);
@@ -138,6 +139,7 @@ function checkMove(lastClick) {
             }
            
             turn = switchTurn(turn);
+            clearSelectedPiece();
             renderBoard();
    
         } else if (forceJump === false && isAttackOk[0]) {
@@ -147,6 +149,7 @@ function checkMove(lastClick) {
 
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [lastClick.id];
+            allClickableSquares[squareSelected].classList.add('selected');
             validAttackMade = true;
             stopMove = true;
             wasLegalClick = true;
@@ -159,6 +162,7 @@ function checkMove(lastClick) {
             forceJump = true;
             wasLegalClick = true;
             squareSelected = [lastClick.id];
+            allClickableSquares[squareSelected].classList.add('selected');
         }
 
         if (validAttackMade === true && !nextMultipleAttackOk(lastClick) && wasLegalClick) {
@@ -172,16 +176,18 @@ function checkMove(lastClick) {
             }
         
             turn = switchTurn(turn);
+            clearSelectedPiece();
             renderBoard();
         }
     }
     if (firstMoveOk(lastClick)) {
         squareSelected = [lastClick.id];
+        allClickableSquares[squareSelected].classList.add('selected');
     }
     wasLegalClick = false;
     updateTurnDisplay();
     checkEndGame();
-    
+    //displaySelectedPiece();
 }
 
 function crownKing(lastClick) {
@@ -393,6 +399,14 @@ function checkEndGame() {
 function resetLastGameResult() {
     localStorageData[0].lastGameResult = '';
     localStorageData[1].lastGameResult = '';
+}
+
+function clearSelectedPiece() {
+    for (let i = 0; i < allClickableSquares.length; i++) {
+        const currentClickableSquare = allClickableSquares[i];
+        currentClickableSquare.classList.remove('selected');
+
+    }
 }
 
 drawButton.addEventListener('click', () => {
