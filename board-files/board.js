@@ -103,18 +103,6 @@ function attackOk(lastClick) {
     }
 }
 
-function doesColorHaveAttack(turn) {
-    for (let i = 0; i < boardState.length; i++) {
-        if (boardState[i].color === turn) {
-            const currentPieceAttackOk = attackOk(allClickableSquares[i]);
-            if (currentPieceAttackOk[0]) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 function checkMove(lastClick) {
 
     const isKingMove = checkKing(lastClick);
@@ -125,6 +113,7 @@ function checkMove(lastClick) {
         const isNextAttackOk = nextAttackOk(lastClick);
 
         if (forceJump === false && secondMoveOk(lastClick) && stopMove === false) {
+            
             squareSelected.push(lastClick.id);
             boardState = movePiece(squareSelected[0], squareSelected[1], boardState);
             squareSelected = [];
@@ -178,7 +167,7 @@ function checkMove(lastClick) {
     checkEndGame();
     console.log(turn);
     console.log(squareSelected);
-    console.log(forceJump);
+    console.log(doesColorHaveAttack());
 }
 
 function crownKing(lastClick) {
