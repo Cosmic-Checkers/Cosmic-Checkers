@@ -1,8 +1,11 @@
 import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow } from './board-utils.js';
+import { loadFromLocalStorage } from '../game-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 const drawButton = document.getElementById('draw-button');
-// const turnDisplay = document.getElementById('turn-display');
+const turnDisplay = document.getElementById('turn-display');
+const nameDisplay = document.getElementById('name-display-area');
+
 let boardState = [
     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
     { id: 4, color: 'red', isKing: false }, { id: 5, color: 'red', isKing: false }, { id: 6, color: 'red', isKing: false }, { id: 7, color: 'red', isKing: false },
@@ -13,18 +16,7 @@ let boardState = [
     { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
-
-
-// let boardState = [ 
-//     null, null, null, null,
-//     null, { id: 32, color: 'red', isKing: false }, null, null,
-//     null, { id: 32, color: 'black', isKing: false }, { id: 32, color: 'red', isKing: false }, null,
-//     null, null, null, null,
-//     null, { id: 32, color: 'red', isKing: false }, null, null,
-//     null, null, null, null,
-//     { id: 32, color: 'red', isKing: false }, null, null, null,
-//     { id: 32, color: 'black', isKing: false }, null, null, null,
-// ];
+const localStorageData = loadFromLocalStorage();
 
 let squareSelected = [];
 let turn = 'black';
@@ -33,6 +25,17 @@ let stopMove = false;
 let wasLegalClick = false;
 let validAttackMade = false;
 
+function updateTurnDisplay() {
+    turnDisplay.textContent = turn;
+    let text = '';
+
+    for (let i = 0; i < localStorageData.length; i++) {
+        if (turn === localStorageData[i].color) {
+            text = localStorageData[i].name + ' it is your turn' ;
+        }
+    }
+    nameDisplay.textContent = text;
+}
 
 
 function renderBoard() {
@@ -124,7 +127,7 @@ function checkMove(lastClick) {
             if (isKingMove) {
                 crownKing(lastClick);
             }
-
+           
             turn = switchTurn(turn);
             renderBoard();
    
@@ -158,7 +161,7 @@ function checkMove(lastClick) {
             if (isKingMove) {
                 crownKing(lastClick);
             }
-
+        
             turn = switchTurn(turn);
             renderBoard();
         }
@@ -167,6 +170,7 @@ function checkMove(lastClick) {
         squareSelected = [lastClick.id];
     }
     wasLegalClick = false;
+    updateTurnDisplay();
     checkEndGame();
     
 }
@@ -324,6 +328,7 @@ function isSquareIdEmpty(number) {
     return false;
 }
 
+
 function switchTurn() {
     if (turn === 'red') {
         return 'black';   
@@ -355,6 +360,6 @@ drawButton.addEventListener('click', () => {
 });
 
 
-
+updateTurnDisplay();
 renderBoard();
 setEventListeners();
