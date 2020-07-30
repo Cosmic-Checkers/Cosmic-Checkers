@@ -1,10 +1,11 @@
 import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow } from './board-utils.js';
-import { loadFromLocalStorage } from '../game-utils.js';
+import { loadFromLocalStorage, saveToLocalStorage } from '../game-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
 const drawButton = document.getElementById('draw-button');
 const turnDisplay = document.getElementById('turn-display');
 const nameDisplay = document.getElementById('name-display-area');
+const gameBoard = document.getElementById('game-board');
 
 let boardState = [
     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
@@ -35,6 +36,14 @@ function updateTurnDisplay() {
         }
     }
     nameDisplay.textContent = text;
+    if (turn === 'red') {
+        gameBoard.classList.add('red-turn');
+        gameBoard.classList.remove('black-turn');
+    } else {
+        gameBoard.classList.add('black-turn');
+        gameBoard.classList.remove('red-turn');
+    }
+
 }
 
 
@@ -356,7 +365,14 @@ function checkEndGame() {
     }
 }
 drawButton.addEventListener('click', () => {
-    document.location = '../results/results.html';
+    const userConfirm = confirm('Call it a draw?');
+    
+    if (userConfirm) {
+        localStorageData[0].draws++;
+        localStorageData[1].draws++;
+        saveToLocalStorage(localStorageData);
+        document.location = '../results/results.html';
+    }
 });
 
 

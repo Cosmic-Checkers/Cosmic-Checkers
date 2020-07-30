@@ -13,7 +13,7 @@ inputForm.addEventListener('submit', (e) => {
     const playerOneName = formData.get('name1');
     const playerTwoName = formData.get('name2');
     const playerColors = randomizer();
-    const playerData = [{ name: playerOneName, wins: 0, losses: 0, draw: 0, color: playerColors[0] }, { name: playerTwoName, wins: 0, losses: 0, draw: 0, color: playerColors[1] }];
+    const playerData = [{ name: playerOneName, wins: 0, losses: 0, draws: 0, color: playerColors[0] }, { name: playerTwoName, wins: 0, losses: 0, draws: 0, color: playerColors[1] }];
     saveToLocalStorage(playerData);
     document.location = '../board-files/board.html';
 });
