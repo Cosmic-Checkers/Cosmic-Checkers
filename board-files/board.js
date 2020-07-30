@@ -1,4 +1,4 @@
-import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow } from './board-utils.js';
+import { redAttacksFrom, redMovesFrom, blackMovesFrom, blackAttacksFrom, isItemInArray, movePiece, removePiece, kingsRow, getKingAttack, getKingMoves } from './board-utils.js';
 import { loadFromLocalStorage, saveToLocalStorage } from '../game-utils.js';
 
 const allClickableSquares = document.querySelectorAll('.clickable');
@@ -21,7 +21,7 @@ let boardState = [
 ];
 
 let squareSelected = [];
-let turn = 'black';
+export let turn = 'black';
 let forceJump = false;
 let stopMove = false;
 let wasLegalClick = false;
@@ -277,13 +277,13 @@ function getAttack(id) {
     }
 }
 
-function getKingAttack(id) {
-    const redAttacks = redAttacksFrom[id];
-    const blackAttacks = blackAttacksFrom[id];
-    const kingAttacks = redAttacks.concat(blackAttacks);
+// function getKingAttack(id) {
+//     const redAttacks = redAttacksFrom[id];
+//     const blackAttacks = blackAttacksFrom[id];
+//     const kingAttacks = redAttacks.concat(blackAttacks);
 
-    return kingAttacks;
-}
+//     return kingAttacks;
+// }
 
 function getMoves(color, squareNumber) {
     if (color === 'red') {
@@ -293,13 +293,13 @@ function getMoves(color, squareNumber) {
 
 }
 
-function getKingMoves(squareNumber) {
-    const redMoves = redMovesFrom[squareNumber];
-    const blackMoves = blackMovesFrom[squareNumber];
-    const kingMoves = redMoves.concat(blackMoves);
+// function getKingMoves(squareNumber) {
+//     const redMoves = redMovesFrom[squareNumber];
+//     const blackMoves = blackMovesFrom[squareNumber];
+//     const kingMoves = redMoves.concat(blackMoves);
 
-    return kingMoves;
-}
+//     return kingMoves;
+// }
 
 function firstMoveOk(lastClick) {
     if (boardState[lastClick.id] && boardState[lastClick.id].color === turn) {

@@ -1,6 +1,6 @@
 // IMPORT MODULES under test here:
 // import { example } from '../example.js';
-import { isItemInArray, movePiece } from '../board-files/board-utils.js';
+import { isItemInArray, movePiece, getKingMoves } from '../board-files/board-utils.js';
 
 const test = QUnit.test;
 
@@ -29,6 +29,25 @@ test('movePiece should take an array item and exchange it with a null item in th
     // Call the function you're testing and set the result to a const
     const actual = movePiece(0, 1, testArray);
 
+    //Expect
+    // Make assertions about what is expected versus the actual result
+    expect.deepEqual(actual, expected);
+});
+
+test('getKingMoves should return all possible red and black moves from a square', (expect) => {
+    //Arrange
+    // Set up your arguments and expectations
+    const square = 10;
+    
+    //Act 
+    // Call the function you're testing and set the result to a const
+    const actual = getKingMoves(square);
+    const expected = [
+        14,
+        15,
+        6,
+        7
+    ];
     //Expect
     // Make assertions about what is expected versus the actual result
     expect.deepEqual(actual, expected);
