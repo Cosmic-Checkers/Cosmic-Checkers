@@ -1,0 +1,40 @@
+main {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+    background-color: rgba(0, 0, 0, 0);
+    align-items: center;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    width: 80vw;
+    background-color: #6761a870;
+    border-radius: 20px;
+    padding: 15px;
+    margin: 15px;
+}
+
+img {
+    height: 300px;
+    width: 300px;   
+}
+
+h2 {
+    font-size: 25px;
+    padding-right: 15px;
+}
+
+.back-button {
+    height: 60px;
+    width: 60px;
+}
+
+button {
+    background-color: rgba(0, 0, 0, 0.582);
+    color: rgba(245, 245, 245, 0.548);
+    display: inline;
+    padding: 5px;
+    font-family: 'Ranchers', cursive;
+}

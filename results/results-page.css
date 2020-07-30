@@ -43,15 +43,12 @@ section {
     display: flex;
     flex-direction: row;
     width: 80vw;
-    
     flex-direction: column;
     display: block;
     background-color: #6761a89d;
     border-radius: 20px;
     padding: 15px;
-    margin: 15px;
- 
-    
+    margin: 15px;  
 }
 
 .player-stats-container {
