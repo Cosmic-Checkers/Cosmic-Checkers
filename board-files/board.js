@@ -6,6 +6,8 @@ const drawButton = document.getElementById('draw-button');
 const turnDisplay = document.getElementById('turn-display');
 const nameDisplay = document.getElementById('name-display-area');
 const gameBoard = document.getElementById('game-board');
+const localStorageData = loadFromLocalStorage();
+
 
 let boardState = [
     { id: 0, color: 'red', isKing: false }, { id: 1, color: 'red', isKing: false }, { id: 2, color: 'red', isKing: false }, { id: 3, color: 'red', isKing: false }, 
@@ -17,7 +19,6 @@ let boardState = [
     { id: 16, color: 'black', isKing: false }, { id: 17, color: 'black', isKing: false }, { id: 18, color: 'black', isKing: false }, { id: 19, color: 'black', isKing: false }, 
     { id: 20, color: 'black', isKing: false }, { id: 21, color: 'black', isKing: false }, { id: 22, color: 'black', isKing: false }, { id: 23, color: 'black', isKing: false }
 ];
-const localStorageData = loadFromLocalStorage();
 
 let squareSelected = [];
 let turn = 'black';
@@ -345,6 +346,17 @@ function switchTurn() {
     return 'red';
 }
 
+function playerColor(color) {
+    for (let i = 0; i < localStorageData.length; i++) {
+        const currentPlayer = localStorageData[i];
+
+        if (currentPlayer.color === color) {
+            return currentPlayer;
+        }
+    }
+    return null;
+}
+
 function checkEndGame() {
     let red = 0;
     let black = 0;
@@ -358,12 +370,23 @@ function checkEndGame() {
         }
     }
     if (red === 0) {
-        // console.log('***GAME OVER, BLACK WINS***');
+        const winningPlayer = playerColor('black');
+        const losingPlayer = playerColor('red');
+        winningPlayer.wins++;
+        losingPlayer.losses++;
+        saveToLocalStorage(localStorageData);
+        document.location = '../results/results.html';
     }
     if (black === 0) {
-        // console.log('***GAME OVER, RED WINS***');
+        const winningPlayer = playerColor('red');
+        const losingPlayer = playerColor('black');
+        winningPlayer.wins++;
+        losingPlayer.losses++;
+        saveToLocalStorage(localStorageData);
+        document.location = '../results/results.html';
     }
 }
+
 drawButton.addEventListener('click', () => {
     const userConfirm = confirm('Call it a draw?');
     
