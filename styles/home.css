@@ -25,6 +25,7 @@ h1 {
 
 main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #6761a867;
@@ -41,7 +42,8 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    display: block;
+    flex-direction: column;
+    padding: 10px;
 }
 
 label {
@@ -63,8 +65,7 @@ input {
       border-radius: 15px;;
       box-shadow: 5px 10px rgba(102, 51, 153, 0.651);
       background-color: #6761A8;
-      
-    
+      display: block;    
   }
 
 footer {
@@ -75,5 +76,9 @@ footer {
     background-color: #6761A8;
     background-image: linear-gradient( #70D7FF, #6761AB, black);
 
+    
+}
+
+#game-rules {
     
 }

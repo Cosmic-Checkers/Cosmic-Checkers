@@ -2,6 +2,8 @@
 import { saveToLocalStorage, randomizer } from './game-utils.js';
 
 const inputForm = document.getElementById('input-form');
+
+
 // initialize state
 
 // set event listeners to update state and DOM

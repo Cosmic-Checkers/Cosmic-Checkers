@@ -1,5 +1,3 @@
-
-
 export const redMovesFrom = [
     [4, 5], [5, 6], [6, 7], [7],
     [8], [8, 9], [9, 10], [10, 11],
@@ -49,21 +47,11 @@ export const kingsRow = [
     28, 29, 30, 31
 ];
 
-export function isItemInArray(item, array) {
-    for (let i = 0; i < array.length; i++) {
-        if (Number(item) === array[i]) {
-            return true;
-        }
-    }
-    return false;
-}
-
 export function movePiece(squareFrom, squareTo, boardState) {
     const modifiedBoardState = boardState.slice();
+
     modifiedBoardState[squareTo] = modifiedBoardState[squareFrom];
-
     removePiece(squareFrom, modifiedBoardState);
-
     return modifiedBoardState;
 }
 
@@ -85,4 +73,13 @@ export function getKingMoves(squareNumber) {
     const kingMoves = redMoves.concat(blackMoves);
 
     return kingMoves;
+}
+
+export function isItemInArray(item, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (Number(item) === array[i]) {
+            return true;
+        }
+    }
+    return false;
 }
